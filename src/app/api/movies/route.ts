@@ -1,16 +1,19 @@
 
-import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import { decodedToken } from '@/functions/decodedToken';
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import prisma from '../../../../lib/db';
 
 
-const prisma = new PrismaClient();
 
-export async function GET() {
+
+export async function GET(request: NextRequest) {
     try {
-      // Obter todos os filmes salvos
-      const movies = await prisma.movie.findMany();
-  
-      return NextResponse.json(movies);
+        const token = decodedToken(request)
+
+    if (token) {
+        const movies = await prisma.movie.findMany();
+        return NextResponse.json(movies);}
     } catch (error) {
       console.error("Error fetching movies from database:", error);
       return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
@@ -18,27 +21,102 @@ export async function GET() {
       await prisma.$disconnect();
     }
 }
-export async function POST(req: Request) {
-    try {
-      const { title, overview, releaseYear, price, posterPath } = await req.json();
-  
-      // Salvar o filme no banco de dados
-      const savedMovie = await prisma.movie.create({
-        data: {
-          title,
-          overview,
-          releaseYear,
-          price,
-          posterPath, // URL da imagem ou caminho do arquivo no servidor
-        },
+export async function POST(request: NextRequest) {
+    const type = z.object({
+        title: z.string().email(),
+        overview: z.string(),
+        releaseYear: z.number(),
+        price: z.number(),
+        posterPath: z.string(),
+        rented: z.boolean(),
+    
       });
+    try {
+        const body = await request.json();
+      const { title, overview, releaseYear, price, posterPath,rented }  = type.parse(body);
+        const token = decodedToken(request)
+   
+
+        if (token) {
+            const savedMovie = await prisma.movie.create({
+                data: {
+                    title,
+                    overview,
+                    releaseYear,
+                    price,
+                    posterPath,
+                    rented
+                },
+            });
+            return NextResponse.json(savedMovie, { status: 201 });
+        } else { 
+            return NextResponse.json({ error: 'Acesso negado' }, { status: 401 });
+        }
   
-      return NextResponse.json(savedMovie, { status: 201 });
+   
     } catch (error) {
       console.error("Error saving movie:", error);
       return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
-    } finally {
-      await prisma.$disconnect();
-    }
+    } 
+  }
+  export async function PATCH(request: NextRequest) {
+  
+    try {
+      
+      const { id,title, overview, releaseYear, price, posterPath,rented }  = await request.json();
+        const token = decodedToken(request)
+   
+
+        if (token) {
+            const savedMovie = await prisma.movie.update({
+                where: {
+                    id
+                 },
+                data: {
+                    title,
+                    overview,
+                    releaseYear,
+                    price,
+                    posterPath,
+                    rented
+                },
+            });
+            return NextResponse.json(savedMovie, { status: 201 });
+        } else { 
+            return NextResponse.json({ error: 'Acesso negado' }, { status: 401 });
+        }
+  
+   
+    } catch (error) {
+      console.error("Error saving movie:", error);
+      return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    } 
+  }
+  
+  export async function DELETE(request: NextRequest) {
+  
+    try {
+      
+      const { id }  = await request.json();
+        const token = decodedToken(request)
+   
+
+        if (token) {
+            const savedMovie = await prisma.movie.delete({
+                where: {
+                    id
+                 }
+           
+            });
+            return NextResponse.json(savedMovie, { status: 201 });
+        } else { 
+            return NextResponse.json({ error: 'Acesso negado' }, { status: 401 });
+        }
+  
+   
+    } catch (error) {
+      console.error("Error saving movie:", error);
+      return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    } 
   }
   

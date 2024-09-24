@@ -4,8 +4,8 @@ import jwt from 'jsonwebtoken';
 
 
 interface DecodedToken {
-    name: string;
-    adm:boolean;
+     name: string;
+     isAdmin:boolean;
      iat: number;
      exp: number;
      sub: string;
