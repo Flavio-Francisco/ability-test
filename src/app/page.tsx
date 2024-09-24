@@ -1,9 +1,9 @@
-import ListMovies from "@/components/listMovies";
+import LoginPage from "@/components/auth";
 
-export default function Home() {
+export default function Auth() {
   return (
     <div>
-      <ListMovies />
+      <LoginPage />
     </div>
   );
 }

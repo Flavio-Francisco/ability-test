@@ -17,12 +17,14 @@
     "@prisma/client": "^5.19.1",
     "axios": "^1.7.7",
     "fastify": "^5.0.0",
+    "formik": "^2.4.6",
     "i": "^0.3.7",
     "jsonwebtoken": "^9.0.2",
     "next": "14.2.12",
     "npm": "^10.8.3",
     "react": "^18",
     "react-dom": "^18",
+    "yup": "^1.4.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
