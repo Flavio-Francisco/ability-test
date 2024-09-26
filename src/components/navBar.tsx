@@ -14,6 +14,7 @@ import DensityMediumIcon from "@mui/icons-material/DensityMedium";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/contexts/userContext";
+import UserCard from "./CardUser";
 
 interface Childen {
   children: React.ReactNode;
@@ -164,6 +165,19 @@ function ResponsiveAppBar({ children }: Childen) {
               <MenuItem onClick={handleCloseNavMenu}>
                 <Typography sx={{ textAlign: "center" }}>Meu Filmes</Typography>
               </MenuItem>
+            </Box>
+            <Box
+              sx={{
+                display: {
+                  xs: "none",
+                  md: "flex",
+                  marginRight: 20,
+                },
+              }}
+            >
+              <div>
+                <UserCard />
+              </div>
             </Box>
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Sair">
