@@ -4,8 +4,10 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import "../../app/globals.css";
 import { useRouter } from "next/navigation";
+import { useSession } from "@/contexts/userContext";
 
 const LoginPage = () => {
+  const { getUser } = useSession();
   const router = useRouter();
   const initialValues = {
     email: "",
@@ -15,14 +17,15 @@ const LoginPage = () => {
   const validationSchema = Yup.object({
     email: Yup.string().email("Email inválido").required("Campo obrigatório"),
     password: Yup.string()
-      .min(6, "A senha deve ter pelo menos 6 caracteres")
+      .min(4, "A senha deve ter pelo menos 4 caracteres")
       .required("Campo obrigatório"),
   });
 
-  const handleSubmit = (values: { email: string; password: string }) => {
-    // Lógica para submissão dos dados
-    console.log(values);
+  const handleSubmit = async (values: { email: string; password: string }) => {
+    getUser(values);
     router.push("/dashboard");
+
+    console.log(values);
   };
 
   return (
@@ -88,18 +91,6 @@ const LoginPage = () => {
             </div>
           </Form>
         </Formik>
-
-        <div className="text-center mt-4">
-          <p className="text-sm text-gray-600">
-            Não tem uma conta?{" "}
-            <a
-              href="/register"
-              className="text-indigo-600 hover:text-indigo-500"
-            >
-              Cadastre-se
-            </a>
-          </p>
-        </div>
       </div>
     </div>
   );

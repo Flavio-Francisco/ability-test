@@ -1,10 +1,15 @@
 "use client";
+import { useSession } from "@/contexts/userContext";
 import { Movies } from "@/types/movies";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function ListMovies() {
+  const { user } = useSession();
+  const route = useRouter();
   const [movies, setMovies] = useState<Movies[]>([]);
   const [selectedMovie, setSelectedMovie] = useState<Movies | null>(null);
   const key = "383d2e484bb12aa70c79304c4c5b2fce";
@@ -34,7 +39,30 @@ export default function ListMovies() {
   const closeModal = () => {
     setSelectedMovie(null);
   };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const checkUser = () => {
+    if (!user?.token) {
+      route.push("/");
+    }
+  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      checkUser();
+    }, 3000);
 
+    return () => clearTimeout(timer);
+  }, [user, route, checkUser]);
+  if (!user?.token) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <div className="m-auto flex flex-col justify-center items-center">
+          <div className="m-auto">
+            <CircularProgress />
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">

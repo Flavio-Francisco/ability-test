@@ -1,6 +1,8 @@
 "use client";
 
+import { useSession } from "@/contexts/userContext";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import { useRouter } from "next/navigation";
 import * as Yup from "yup";
 
 interface RegisterFormValues {
@@ -12,7 +14,14 @@ interface RegisterFormValues {
   birthDate: string;
   phone: string;
 }
-const RegisterPage = () => {
+export default function RegisterPage () {
+  const router = useRouter();
+  const { user } = useSession();
+
+
+  if (!user?.token) {
+    router.push("/");
+  }
   const initialValues = {
     email: "",
     password: "",
@@ -201,4 +210,6 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+
+
+

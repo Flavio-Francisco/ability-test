@@ -1,15 +1,9 @@
 import { NextRequest} from "next/server";
 import jwt from 'jsonwebtoken';
+import { DecodedToken } from "@/types/DecodedToken";
 
 
 
-interface DecodedToken {
-     name: string;
-     isAdmin:boolean;
-     iat: number;
-     exp: number;
-     sub: string;
-}
    
 
 
@@ -32,4 +26,9 @@ export function decodedToken(data: NextRequest): DecodedToken {
       throw new Error('Token inválido ou expirado');
     }
   }
+ 
+ 
   
+  
+  
+ 

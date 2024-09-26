@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import prisma from '../../../../lib/db';
 import jwt from 'jsonwebtoken';
+import { User } from '@/types/user';
+
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,10 +20,12 @@ export async function POST(request: NextRequest) {
     const userPrisma = await prisma.user.findMany({
       where: { email: user.email },
       select: {
+        id: true,
         name: true,
         email: true,
         password: true,
-        isAdmin:true,
+        isAdmin: true,
+    
       },
     });
 
@@ -31,22 +35,30 @@ export async function POST(request: NextRequest) {
 
     const [userAuth] = userPrisma;
 
-    // Validação da senha
+    
     if (user.password !== userAuth.password) {
       return NextResponse.json({ error: 'Senha incorreta' }, { status: 401 });
     }
 
-    // Geração do token JWT
+    
     const token = jwt.sign(
       {
+        id: userAuth.id,
         name: userAuth.name,
         isAdmin: userAuth.isAdmin,
        },
       process.env.JWT_SECRET as string,  
       { subject: userAuth.email, expiresIn: '1 days' }
     );
-
-    return NextResponse.json({ token });
+    const data: User = {
+      id: userAuth.id,
+      email: userAuth.email,
+      name: userAuth.name,
+      adm: userAuth.isAdmin,
+      token: token
+      
+}
+    return NextResponse.json( data );
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   }
