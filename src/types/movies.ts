@@ -1,10 +1,12 @@
 export interface Movies {
-    release_date: string | number | Date;
+
     id: number;
     title: string;
-    gender: string;
-    year: string;
+    releaseYear: number;
     overview: string;
-    poster_path: string;
-    release_dat:string 
+    price: number;
+    posterPath: string;
+    rented: boolean;
+    userId:number;
+
   }
