@@ -14,9 +14,14 @@ if (token.isAdmin === true) {
 
       const usuarios = await prisma.user.findMany({
         select: {
-         name: true,
-         email: true, 
-          isAdmin: true,  
+          id: true,
+          name: true,
+          email: true, 
+          isAdmin: true, 
+          cpf: true,
+          birthDate: true,
+          phone: true,
+          password:true
         },
       });
   

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export async function fetchUsuarios(token: string) {
+export async function getUsers(token: string) {
   try {
     const response = await axios.get('/api/users', {
       headers: {
@@ -9,10 +9,10 @@ export async function fetchUsuarios(token: string) {
     });
 
   
-    const usuarios = response.data;
-    console.log('Usuários:', usuarios);
+    const users = response.data;
+    console.log('Usuários:', users);
 
-    return usuarios;
+    return users;
   } catch (error) {
     console.error('Erro ao buscar usuários:', error);
     throw error;  

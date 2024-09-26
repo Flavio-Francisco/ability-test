@@ -85,7 +85,19 @@ function ResponsiveAppBar({ children }: Childen) {
                     router.push(`/register?id=${user?.id}`);
                   }}
                 >
-                  <Typography sx={{ textAlign: "center" }}>Usuários</Typography>
+                  <Typography sx={{ textAlign: "center" }}>
+                    Novo Usuário
+                  </Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    router.push(`/users?id=${user?.id}`);
+                  }}
+                >
+                  <Typography sx={{ textAlign: "center" }}>
+                    Editar Usuários
+                  </Typography>
                 </MenuItem>
               </Menu>
             </Box>
