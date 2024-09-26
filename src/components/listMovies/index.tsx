@@ -63,7 +63,6 @@ export default function ListMovies() {
             className="bg-white rounded-lg shadow-lg overflow-hidden relative group"
           >
             <Image
-              priority
               src={movie.posterPath}
               alt={movie.title}
               width={200}

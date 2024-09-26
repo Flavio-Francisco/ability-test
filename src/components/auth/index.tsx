@@ -31,7 +31,7 @@ const LoginPage = () => {
   return (
     <div
       className="flex min-h-screen items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/background.jpg')" }} // Caminho da imagem
+      style={{ backgroundImage: "url('/image/background.jpg')" }} // Caminho da imagem
     >
       <div className="w-full max-w-md p-8 space-y-4 bg-white bg-opacity-90 rounded shadow-lg">
         <h1 className="text-2xl font-bold text-center">Login</h1>

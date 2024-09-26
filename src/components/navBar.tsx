@@ -82,7 +82,7 @@ function ResponsiveAppBar({ children }: Childen) {
                 <MenuItem
                   onClick={() => {
                     handleCloseUserMenu();
-                    router.push("/register");
+                    router.push(`/register?id=${user?.id}`);
                   }}
                 >
                   <Typography sx={{ textAlign: "center" }}>Usuários</Typography>
@@ -161,6 +161,7 @@ function ResponsiveAppBar({ children }: Childen) {
             >
               Locadora
             </Typography>
+
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               <MenuItem onClick={handleCloseNavMenu}>
                 <Typography sx={{ textAlign: "center" }}>Meu Filmes</Typography>
