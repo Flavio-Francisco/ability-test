@@ -1,9 +1,9 @@
 "use client";
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
-import { Dialog, DialogContent } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import CircularProgress from "@mui/material/CircularProgress";
 import { getUsers } from "@/fetch/getUser";
@@ -17,6 +17,7 @@ import InputMask from "react-input-mask";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import { formatDate } from "@/functions/formatDate";
+import { deleteUser } from "@/fetch/deleteUser";
 
 // Validação com Yup
 const validationSchema = Yup.object().shape({
@@ -42,6 +43,7 @@ export default function ListUsers() {
   const { user } = useSession();
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
   const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -58,9 +60,31 @@ export default function ListUsers() {
   const mutation = useMutation({
     mutationKey: ["updateUser"],
     mutationFn: (values: UserData) => updateUser(values, user?.token || ""),
-    onSuccess: () => {
-      refetch();
-      handleClose();
+    onSuccess: (response) => {
+      if (response.message) {
+        alert(response.message);
+        refetch();
+        handleClose();
+      } else {
+        console.log("message: " + response.message);
+
+        alert("Erro ao excluir o usuário");
+      }
+    },
+  });
+  const { mutate } = useMutation({
+    mutationKey: ["updateUser"],
+    mutationFn: (id: number) => deleteUser(user?.token || "", id),
+    onSuccess: (response) => {
+      if (response.message) {
+        alert(response.message);
+        refetch();
+        handleCloseDelete();
+      } else {
+        console.log("message: " + response.message);
+
+        alert("Erro ao excluir o usuário");
+      }
     },
   });
 
@@ -68,14 +92,21 @@ export default function ListUsers() {
     setSelectedUser(user);
     setOpen(true);
   };
-
+  const handleOpenDelete = () => {
+    setOpenDelete(true);
+  };
   const handleClose = () => {
     setOpen(false);
     setSelectedUser(null);
   };
-
-  if (isLoading) return <CircularProgress />;
-
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+    setSelectedUser(null);
+    setOpen(false);
+  };
+  useEffect(() => {
+    refetch();
+  }, []);
   return (
     <div
       className="flex min-h-[94vh] items-center justify-center bg-cover bg-center "
@@ -87,24 +118,30 @@ export default function ListUsers() {
             Lista de Usuários
           </h1>
         </div>
-        <div className="flex  flex-col justify-center items-center min-h-96 gap-4  ">
-          {(users || []).map((user) => (
-            <div
-              key={user.id}
-              className="flex bg-slate-400 bg-opacity-95 w-2/4 justify-center items-center py-2 rounded"
-            >
-              <p
-                style={{
-                  cursor: "pointer",
-                  color: "white",
-                }}
-                onClick={() => handleOpen(user)}
+        {isLoading ? (
+          <div className="flex  flex-col justify-center items-center min-h-96 gap-4  ">
+            <CircularProgress size={70} style={{ color: "#ffff" }} />
+          </div>
+        ) : (
+          <div className="flex  flex-col justify-center items-center min-h-96 gap-4  ">
+            {(users || []).map((user) => (
+              <div
+                key={user.id}
+                className="flex bg-slate-400 bg-opacity-95 w-2/4 justify-center items-center py-2 rounded"
               >
-                {user.name}
-              </p>
-            </div>
-          ))}
-        </div>
+                <p
+                  style={{
+                    cursor: "pointer",
+                    color: "white",
+                  }}
+                  onClick={() => handleOpen(user)}
+                >
+                  {user.name}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
 
         <Dialog open={open} onClose={handleClose}>
           <DialogContent>
@@ -332,7 +369,7 @@ export default function ListUsers() {
                           </div>
                         </div>
 
-                        <div>
+                        <div className="flex flex-row gap-4 max-sm:flex-col">
                           <button
                             type="submit"
                             className="w-full px-4 py-1 text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 mt-3"
@@ -343,6 +380,17 @@ export default function ListUsers() {
                               "Salvar"
                             )}
                           </button>
+                          <button
+                            type="button"
+                            onClick={() => handleOpenDelete()}
+                            className="w-full px-4 py-1 text-white bg-red-600 rounded hover:bg-red-700  focus:outline-none focus:ring-2 focus:ring-red-500  focus:ring-offset-2 mt-3"
+                          >
+                            {isSubmitting ? (
+                              <CircularProgress size={16} />
+                            ) : (
+                              "Deletar"
+                            )}
+                          </button>
                         </div>
                       </Form>
                     )}
@@ -350,6 +398,30 @@ export default function ListUsers() {
                 </div>
               </div>
             )}
+          </DialogContent>
+        </Dialog>
+        <Dialog open={openDelete} onClose={handleCloseDelete}>
+          <DialogTitle className="font-semibold">Deletar Usuário</DialogTitle>
+          <DialogContent>
+            <div className="p-4 gap-3 flex flex-col justify-center items-center">
+              <p>Tem certeza de que deseja deletar o usuário?</p>
+              <p>{selectedUser?.name}</p>
+            </div>
+            <div className="flex justify-center w-full">
+              <button
+                onClick={handleCloseDelete}
+                className="w-1/4 px-4 py-2 text-white bg-slate-500 rounded hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
+              >
+                Não
+              </button>
+              <button
+                type="submit"
+                className="ml-4 w-1/4 px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700 focus:outline-none focus:ring-2 "
+                onClick={() => mutate(selectedUser?.id || 0)}
+              >
+                Sim
+              </button>
+            </div>
           </DialogContent>
         </Dialog>
       </Box>

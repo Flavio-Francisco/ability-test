@@ -97,23 +97,25 @@ export async function PATCH(request: NextRequest) {
         isAdmin: z.boolean(),
         name: z.string(),
         cpf: z.string(),
-        birthDate: z.date(),
+        birthDate: z.string(),
         phone: z.string(),
       });
         
  
   
-      // Recebendo os dados do corpo da requisição
+   
       const body = await request.json();
-      const user = type.parse(body);
+  const user = type.parse(body);
+  console.log(user);
+  
     try {
     
       const token = decodedToken(request)
       
       if (token.isAdmin === true) {
-        const usuarios = await prisma.user.update({
+         await prisma.user.update({
           where: {
-            email: token.sub,
+            email: user.email,
           },
           data: {
             email: user.email,
@@ -121,13 +123,13 @@ export async function PATCH(request: NextRequest) {
             name: user.name,
             password: user.password,
             cpf: user.cpf,
-            birthDate: user.birthDate,
+            birthDate: new Date(user.birthDate),
             phone: user.phone,
               
           },
         });
   
-        return NextResponse.json(usuarios);
+        return NextResponse.json({message:"usuário atualizado  com sucess!!"});
       } else {
         return NextResponse.json({ error: 'Você não possui permissão para acessar este recurso.' }, { status: 403 });
       }
@@ -137,17 +139,20 @@ export async function PATCH(request: NextRequest) {
 }
 export async function DELETE(request: NextRequest) {
  
-
+const {id} = await request.json();
   try {
   
     const token = decodedToken(request)
-    const usuarios = await prisma.user.delete({
-      where: {
-        email: token.sub,
-      }
-    });
-
-    return NextResponse.json(usuarios);
+    if (token.isAdmin) {
+     const user= await prisma.user.delete({
+        where: {
+          id: id,
+        }
+      });
+      return NextResponse.json({message:`Usuário ${user.name} deletado com sucesso!!`});
+    }
+   
+    
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   }
