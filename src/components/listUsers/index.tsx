@@ -3,7 +3,12 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
-import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+import {
+  Autocomplete,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import CircularProgress from "@mui/material/CircularProgress";
 import { getUsers } from "@/fetch/getUser";
@@ -18,6 +23,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import { formatDate } from "@/functions/formatDate";
 import { deleteUser } from "@/fetch/deleteUser";
+import { StyledTextField } from "@/utils/styledTextField";
 
 // Validação com Yup
 const validationSchema = Yup.object().shape({
@@ -87,6 +93,13 @@ export default function ListUsers() {
       }
     },
   });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleOpenAutocomplete = (event: any, value: any) => {
+    if (value) {
+      setSelectedUser(value);
+      setOpen(true);
+    }
+  };
 
   const handleOpen = (user: UserData) => {
     setSelectedUser(user);
@@ -123,23 +136,32 @@ export default function ListUsers() {
             <CircularProgress size={70} style={{ color: "#ffff" }} />
           </div>
         ) : (
-          <div className="flex  flex-col justify-center items-center min-h-96 gap-4  ">
-            {(users || []).map((user) => (
-              <div
-                key={user.id}
-                className="flex bg-slate-400 bg-opacity-95 w-2/4 justify-center items-center py-2 rounded"
-              >
-                <p
-                  style={{
-                    cursor: "pointer",
-                    color: "white",
-                  }}
-                  onClick={() => handleOpen(user)}
+          <div className="flex flex-col justify-center items-center min-h-96 gap-4 ">
+            <Autocomplete
+              disablePortal
+              options={users || []}
+              getOptionLabel={(option) => option.name}
+              sx={{ width: "41%", marginTop: 5, marginRight: 2 }}
+              onChange={handleOpenAutocomplete}
+              renderInput={(params) => (
+                <StyledTextField {...params} label="Lista de Filmes" />
+              )}
+            />
+            <div className=" h-96 overflow-y-auto gap-4 w-2/4">
+              {(users || []).map((parm) => (
+                <div
+                  key={parm.id}
+                  className="flex bg-slate-400 bg-opacity-95 w-10/12 justify-center items-center py-2 rounded transition-transform duration-200 transform hover:scale-105 hover:bg-slate-500 m-auto mt-2"
                 >
-                  {user.name}
-                </p>
-              </div>
-            ))}
+                  <p
+                    style={{ cursor: "pointer", color: "white" }}
+                    onClick={() => handleOpen(parm)}
+                  >
+                    {parm.name}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 

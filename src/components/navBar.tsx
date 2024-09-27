@@ -99,6 +99,16 @@ function ResponsiveAppBar({ children }: Childen) {
                     Editar Usuários
                   </Typography>
                 </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    router.push(`/movies?id=${user?.id}`);
+                  }}
+                >
+                  <Typography sx={{ textAlign: "center" }}>
+                    Editar Filmes
+                  </Typography>
+                </MenuItem>
               </Menu>
             </Box>
             <Typography
