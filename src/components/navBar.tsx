@@ -40,7 +40,10 @@ function ResponsiveAppBar({ children }: Childen) {
     setAnchorElNav(null);
     router.push("/myMovies");
   };
-
+  const handleCloseNavMenuHome = () => {
+    setAnchorElNav(null);
+    router.push("/dashboard");
+  };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
@@ -180,6 +183,9 @@ function ResponsiveAppBar({ children }: Childen) {
                     Meu Filmes
                   </Typography>
                 </MenuItem>
+                <MenuItem onClick={handleCloseNavMenuHome}>
+                  <Typography sx={{ textAlign: "center" }}>Home</Typography>
+                </MenuItem>
               </Menu>
             </Box>
 
@@ -202,9 +208,24 @@ function ResponsiveAppBar({ children }: Childen) {
               Locadora
             </Typography>
 
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: "none", md: "flex" },
+              }}
+            >
               <MenuItem onClick={handleCloseNavMenu}>
                 <Typography sx={{ textAlign: "center" }}>Meu Filmes</Typography>
+              </MenuItem>
+            </Box>
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: "none", md: "flex", marginLeft: 10 },
+              }}
+            >
+              <MenuItem onClick={handleCloseNavMenuHome}>
+                <Typography sx={{ textAlign: "center" }}>Home</Typography>
               </MenuItem>
             </Box>
             <Box
