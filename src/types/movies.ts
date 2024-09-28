@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Movies {
 
-    id: number;
+    id?: number;
     title: string;
     releaseYear: number;
     overview: string;

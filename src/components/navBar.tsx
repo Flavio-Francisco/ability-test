@@ -47,7 +47,7 @@ function ResponsiveAppBar({ children }: Childen) {
   return (
     <div>
       <AppBar position="fixed">
-        <Container maxWidth="xl">
+        <Container maxWidth="xl" className=" min-w-full ">
           <Toolbar disableGutters>
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="configuração">
@@ -82,11 +82,29 @@ function ResponsiveAppBar({ children }: Childen) {
                 <MenuItem
                   onClick={() => {
                     handleCloseUserMenu();
+                    router.push(`/dashboard`);
+                  }}
+                >
+                  <Typography sx={{ textAlign: "center" }}>Home</Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleCloseUserMenu();
                     router.push(`/register?id=${user?.id}`);
                   }}
                 >
                   <Typography sx={{ textAlign: "center" }}>
                     Novo Usuário
+                  </Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    router.push(`/movie?id=${user?.id}`);
+                  }}
+                >
+                  <Typography sx={{ textAlign: "center" }}>
+                    Novo Filme
                   </Typography>
                 </MenuItem>
                 <MenuItem

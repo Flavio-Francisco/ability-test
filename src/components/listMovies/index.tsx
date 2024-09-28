@@ -18,6 +18,8 @@ export default function ListMovies() {
     queryKey: ["Movies"],
     queryFn: () => getMovies(user?.token || ""),
   });
+
+  
   console.log("Movies", data);
   useEffect(() => {
     setMovies(data);
@@ -55,7 +57,7 @@ export default function ListMovies() {
     );
   }
   return (
-    <div>
+    <div className="">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {(movies || []).map((movie) => (
           <div
@@ -101,7 +103,7 @@ export default function ListMovies() {
               className="absolute top-2 right-2 text-gray-500"
               onClick={closeModal}
             >
-              &times; {/* X para fechar o modal */}
+              &times;
             </button>
           </div>
         </div>

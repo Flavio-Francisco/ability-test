@@ -2,14 +2,11 @@ import { Movies } from "@/types/movies";
 import axios from "axios";
 
 
-export async function updateMovie(movie: Movies, token: string) {
+export async function newMovie(movie: Movies, token: string) {
   try {
     const formData = new FormData();
 
-   if (movie.id) {
-    formData.append("id", movie.id.toString());
-   }
-   
+  
     formData.append("title", movie.title);
     formData.append("releaseYear", movie.releaseYear.toString());
     formData.append("overview", movie.overview);
@@ -18,10 +15,10 @@ export async function updateMovie(movie: Movies, token: string) {
 
  
     if (movie.posterPath) {
-      formData.append("poster", movie.posterPath); // 'poster' deve ser um File
+      formData.append("poster", movie.posterPath); 
     }
 
-    const response = await axios.patch(
+    const response = await axios.post(
       "/api/movies", 
       formData,
       {
