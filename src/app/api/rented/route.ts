@@ -31,7 +31,7 @@ export async function PATCH(request: NextRequest) {
         const token = decodedToken(request)
 
     if (token) {
-        const movies = await prisma.movie.update({
+        await prisma.movie.update({
             where: {
                 id: id,
                
@@ -41,7 +41,7 @@ export async function PATCH(request: NextRequest) {
                 userId:userId
             }
         });
-        return NextResponse.json(movies);}
+        return NextResponse.json({sucess:true});}
     } catch (error) {
       console.error("Error fetching movies from database:", error);
       return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });

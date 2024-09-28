@@ -14,7 +14,11 @@ export async function GET(request: NextRequest) {
         const token = decodedToken(request)
 
     if (token) {
-        const movies = await prisma.movie.findMany();
+      const movies = await prisma.movie.findMany({
+        where: {
+          rented:false
+        }
+        });
         return NextResponse.json(movies);}
     } catch (error) {
       console.error("Error fetching movies from database:", error);

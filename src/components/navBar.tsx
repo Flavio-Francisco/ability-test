@@ -38,6 +38,7 @@ function ResponsiveAppBar({ children }: Childen) {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+    router.push("/myMovies");
   };
 
   const handleCloseUserMenu = () => {
@@ -156,7 +157,6 @@ function ResponsiveAppBar({ children }: Childen) {
                 onClick={handleOpenNavMenu}
                 color="inherit"
               >
-                {/* colocar validação de adm */}
                 <MovieCreationIcon sx={{ color: "white", fontSize: 40 }} />
               </IconButton>
               <Menu

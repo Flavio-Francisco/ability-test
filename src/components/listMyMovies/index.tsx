@@ -6,26 +6,26 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getMovies } from "@/functions/getMovies ";
 import { Rented, rentedMovie } from "@/fetch/rentedMovie";
+import { getMyMovies } from "@/fetch/getMyMovies";
 
-export default function ListMovies() {
+export default function LisMytMovies() {
   const { user } = useSession();
   const route = useRouter();
   const [movies, setMovies] = useState<Movies[]>([]);
   const [selectedMovie, setSelectedMovie] = useState<Movies | null>(null);
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["Movies"],
-    queryFn: () => getMovies(user?.token || ""),
+    queryKey: ["myMovies"],
+    queryFn: () => getMyMovies(user?.token || ""),
   });
 
   const { mutate } = useMutation({
-    mutationKey: ["rentedMovie"],
+    mutationKey: ["retrnMovie"],
     mutationFn: (data: Rented) => rentedMovie(data, user?.token || ""),
     onSuccess: (response) => {
       if (response.sucess) {
-        alert("Filme alugado com sucesso!!");
+        alert("Filme devolvido com sucesso!!");
         setSelectedMovie(null);
         refetch();
         closeModal();
@@ -39,7 +39,9 @@ export default function ListMovies() {
   useEffect(() => {
     setMovies(data);
   }, [data]);
-
+  useEffect(() => {
+    refetch();
+  }, [route]);
   const openModal = (movie: Movies) => {
     setSelectedMovie(movie);
   };
@@ -74,7 +76,7 @@ export default function ListMovies() {
   return (
     <div className="">
       <div className="flex justify-center items-center mt-3">
-        <p className="text-center text-5xl text-white"> Filmes</p>
+        <p className="text-center text-5xl text-white">Meus Filmes</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {(movies || []).map((movie) => (
@@ -116,12 +118,12 @@ export default function ListMovies() {
               onClick={() =>
                 mutate({
                   id: selectedMovie.id || 0,
-                  rented: true,
+                  rented: false,
                   userId: user?.id || 0,
                 })
               }
             >
-              Alugar Filme
+              Devolver Filme
             </button>
           </div>
         </div>
