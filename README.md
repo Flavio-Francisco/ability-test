@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+### Personalizações
 
-First, run the development server:
+- **Nome do Projeto**: Locadora.
+- **Descrição do Projeto**: É um porojeto de jeregiamento de uma locadora.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Instalação
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Para clonar o repositório, execute o seguinte comando:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## bash
+  git clone https://github.com/Flavio-Francisco/ability-test.git
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Depedencias
+Após clonar o repositório, navegue até o diretório do projeto e instale as dependências com o seguimento comando
 
-## Learn More
+npm install 
 
-To learn more about Next.js, take a look at the following resources:
+## Variáveis 
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+crie um arquivo na raiz do projeto com o nome .env e coloque essas variáveis.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+DATABASE_URL="file:./dev.db"
+JWT_SECRET=12345678
 
-## Deploy on Vercel
+## Startando projeto 
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+no terminal digite npm rum dev 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Documentação 
+
+Com o servidor rodando, acesse [http://localhost:3000/api-docs]
+
+para a documentação das endpoints
+
+## Banco de Dados
+
+para visualisar o banco de dados npx prisma studio
+
+## Muito Obrigado!!!
