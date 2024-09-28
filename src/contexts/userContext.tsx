@@ -2,11 +2,11 @@
 import React, { useEffect, createContext, useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import { User } from "@/types/user";
-import { auth } from "@/fetch/auth";
+
 
 interface UserData {
   user: User | null;
-  getUser: (values: { email: string; password: string }) => void;
+  getUser: (data: User) => void;
   logOut: () => void;
 }
 
@@ -31,9 +31,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     restoreUserFromCache();
   }, []);
-  async function getUser(values: { email: string; password: string }) {
+  async function getUser(data: User) {
     try {
-      const data = await auth(values.email, values.password);
       if (data) {
         setUser(data);
         localStorage.setItem("userData", JSON.stringify(data));

@@ -5,8 +5,13 @@ import * as Yup from "yup";
 import "../../app/globals.css";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/contexts/userContext";
+import { useMutation } from "@tanstack/react-query";
+import { auth } from "@/fetch/auth";
+import { useState } from "react";
+import { CircularProgress } from "@mui/material";
 
 const LoginPage = () => {
+  const [isLoding, setIsLoding] = useState(false);
   const { getUser } = useSession();
   const router = useRouter();
   const initialValues = {
@@ -20,10 +25,23 @@ const LoginPage = () => {
       .min(4, "A senha deve ter pelo menos 4 caracteres")
       .required("Campo obrigatório"),
   });
-
+  const { mutate } = useMutation({
+    mutationKey: ["rentedMovie"],
+    mutationFn: (values: { email: string; password: string }) =>
+      auth(values.email, values.password),
+    onSuccess: (response) => {
+      getUser(response);
+      router.push("/dashboard");
+      setIsLoding(false);
+    },
+    onError: () => {
+      alert("Error interno");
+      setIsLoding(false);
+    },
+  });
   const handleSubmit = async (values: { email: string; password: string }) => {
-    getUser(values);
-    router.push("/dashboard");
+    setIsLoding(true);
+    mutate(values);
 
     console.log(values);
   };
@@ -84,9 +102,14 @@ const LoginPage = () => {
             <div>
               <button
                 type="submit"
+                disabled={isLoding}
                 className="w-full px-4 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
-                Entrar
+                {isLoding ? (
+                  <CircularProgress className="text-white" />
+                ) : (
+                  "Entrar"
+                )}
               </button>
             </div>
           </Form>
