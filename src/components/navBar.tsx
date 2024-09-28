@@ -210,7 +210,6 @@ function ResponsiveAppBar({ children }: Childen) {
 
             <Box
               sx={{
-                flexGrow: 1,
                 display: { xs: "none", md: "flex" },
               }}
             >
@@ -220,34 +219,35 @@ function ResponsiveAppBar({ children }: Childen) {
             </Box>
             <Box
               sx={{
-                flexGrow: 1,
-                display: { xs: "none", md: "flex", marginLeft: 10 },
+                display: { xs: "none", md: "flex" },
               }}
             >
               <MenuItem onClick={handleCloseNavMenuHome}>
                 <Typography sx={{ textAlign: "center" }}>Home</Typography>
               </MenuItem>
             </Box>
-            <Box
-              sx={{
-                display: {
-                  xs: "none",
-                  md: "flex",
-                  marginRight: 20,
-                },
-              }}
-            >
-              <div>
-                <UserCard />
-              </div>
-            </Box>
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Sair">
-                <IconButton sx={{ p: 0 }} onClick={logOut}>
-                  <LogoutIcon sx={{ color: "white", fontSize: 30 }} />
-                </IconButton>
-              </Tooltip>
-            </Box>
+            <div className="flex flex-row absolute right-3">
+              <Box
+                sx={{
+                  display: {
+                    xs: "none",
+                    md: "flex",
+                    marginRight: 20,
+                  },
+                }}
+              >
+                <div>
+                  <UserCard />
+                </div>
+              </Box>
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Sair">
+                  <IconButton sx={{ p: 0 }} onClick={logOut}>
+                    <LogoutIcon sx={{ color: "white", fontSize: 30 }} />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            </div>
           </Toolbar>
         </Container>
       </AppBar>
