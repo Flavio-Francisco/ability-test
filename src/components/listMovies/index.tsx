@@ -24,7 +24,7 @@ export default function ListMovies() {
     mutationKey: ["rentedMovie"],
     mutationFn: (data: Rented) => rentedMovie(data, user?.token || ""),
     onSuccess: (response) => {
-      if (response.sucess) {
+      if (response.success) {
         alert("Filme alugado com sucesso!!");
         setSelectedMovie(null);
         refetch();

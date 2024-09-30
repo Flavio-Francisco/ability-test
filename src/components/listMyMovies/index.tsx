@@ -24,7 +24,7 @@ export default function LisMytMovies() {
     mutationKey: ["retrnMovie"],
     mutationFn: (data: Rented) => rentedMovie(data, user?.token || ""),
     onSuccess: (response) => {
-      if (response.sucess) {
+      if (response.success) {
         alert("Filme devolvido com sucesso!!");
         setSelectedMovie(null);
         refetch();
