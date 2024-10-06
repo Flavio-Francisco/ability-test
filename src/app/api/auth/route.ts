@@ -49,6 +49,7 @@ import { User } from '@/types/user';
  *         description: Erro interno do servidor
  */
 export async function POST(request: NextRequest) {
+
   try {
     const type = z.object({
       email: z.string().email(),
@@ -57,6 +58,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const user = type.parse(body);
+console.log(user);
 
     const userPrisma = await prisma.user.findMany({
       where: { email: user.email },
@@ -98,7 +100,7 @@ export async function POST(request: NextRequest) {
     };
 
     return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+  } catch  {
+    return NextResponse.json({ message:"Usuário não encontrado" }, { status: 500 });
   }
 }

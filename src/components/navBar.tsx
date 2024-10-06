@@ -16,12 +16,14 @@ import { useRouter } from "next/navigation";
 import { useSession } from "@/contexts/userContext";
 import UserCard from "./CardUser";
 
+
 interface Childen {
   children: React.ReactNode;
 }
 function ResponsiveAppBar({ children }: Childen) {
   const router = useRouter();
   const { user, logOut } = useSession();
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -114,7 +116,7 @@ function ResponsiveAppBar({ children }: Childen) {
                 <MenuItem
                   onClick={() => {
                     handleCloseUserMenu();
-                    router.push(`/users?id=${user?.id}`);
+                    router.push(`/users`);
                   }}
                 >
                   <Typography sx={{ textAlign: "center" }}>
@@ -124,7 +126,7 @@ function ResponsiveAppBar({ children }: Childen) {
                 <MenuItem
                   onClick={() => {
                     handleCloseUserMenu();
-                    router.push(`/movies?id=${user?.id}`);
+                    router.push(`/movies`);
                   }}
                 >
                   <Typography sx={{ textAlign: "center" }}>

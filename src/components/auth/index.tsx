@@ -14,6 +14,7 @@ const LoginPage = () => {
   const [isLoding, setIsLoding] = useState(false);
   const { getUser } = useSession();
   const router = useRouter();
+  
   const initialValues = {
     email: "",
     password: "",
@@ -30,13 +31,30 @@ const LoginPage = () => {
     mutationFn: (values: { email: string; password: string }) =>
       auth(values.email, values.password),
     onSuccess: (response) => {
-      getUser(response);
-      router.push("/dashboard");
-      setIsLoding(false);
+      console.log(response.data);
+      if (response.status === 404) {
+        console.log(response.data);
+        alert(response.data.error);
+        setIsLoding(false);
+        return;
+      }
+
+      console.log("response", response.status);
+      if (response.status === 200) {
+        console.log(response.data);
+
+        getUser(response.data);
+        router.push("/dashboard");
+        setIsLoding(false);
+      }
     },
-    onError: () => {
-      alert("Error interno");
-      setIsLoding(false);
+    onError: (response) => {
+      if (response.message) {
+        console.log(response.message);
+        alert("Usuário não encontrado!!");
+        setIsLoding(false);
+        return;
+      }
     },
   });
   const handleSubmit = async (values: { email: string; password: string }) => {

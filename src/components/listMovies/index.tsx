@@ -11,6 +11,8 @@ import { Rented, rentedMovie } from "@/fetch/rentedMovie";
 
 export default function ListMovies() {
   const { user } = useSession();
+  console.log(user);
+  
   const route = useRouter();
   const [movies, setMovies] = useState<Movies[]>([]);
   const [selectedMovie, setSelectedMovie] = useState<Movies | null>(null);

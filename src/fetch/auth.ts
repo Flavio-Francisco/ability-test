@@ -9,11 +9,10 @@ export async function auth(email: string,password: string){
           password,
   
       }).then(response => {
-          const user=  response.data;
-         console.log("User: " + user);
+         
          
     
-          return user;
+          return response;
       }).catch(err => { 
           return err
       })
