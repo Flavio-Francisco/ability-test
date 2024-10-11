@@ -25,6 +25,7 @@ model Movie {
   user         User?    @relation(fields: [userId], references: [id]) 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  gender       String?
 }
 
 model User {

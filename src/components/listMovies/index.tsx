@@ -118,9 +118,19 @@ export default function ListMovies() {
                 <p className="font-semibold">Ano de Lançamento: </p>
                 <p>{selectedMovie.releaseYear}</p>
               </div>
-              <div className="flex flex-row gap-1 mb-3">
+              <div className="flex flex-row gap-1">
+                <p className="font-semibold">Gênero: </p>
+                <p>{selectedMovie.gender}</p>
+              </div>
+              <div className="flex flex-row gap-1 mb">
                 <p className="font-semibold">valor: </p>
                 <p>R${selectedMovie.price}</p>
+              </div>
+              <div className="flex flex-row gap-1 mb-3">
+                <p className="font-semibold">Status :</p>
+                <p style={{ color: selectedMovie.rented ? "red" : "green" }}>
+                  {selectedMovie.rented ? "Alugado" : "Disponível"}
+                </p>
               </div>
             </div>
             <div className="flex flex-row justify-around">

@@ -8,6 +8,7 @@ export interface Movies {
     price: number;
     posterPath: any;
     rented: boolean;
+    gender?: string;
     userId:number;
 
   }
