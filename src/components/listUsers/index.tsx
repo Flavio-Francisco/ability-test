@@ -15,7 +15,6 @@ import { getUsers } from "@/fetch/getUser";
 import { useSession } from "@/contexts/userContext";
 import { updateUser } from "@/fetch/updateUser";
 import { UserData } from "@/types/userData";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import InputMask from "react-input-mask";
@@ -40,18 +39,13 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function ListUsers() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-  if (!id) {
-    router.push("/");
-  }
-  const { user } = useSession();
+  const { user, logOut } = useSession();
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  logOut();
 
   const {
     data: users,

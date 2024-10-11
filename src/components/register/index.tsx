@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useSession } from "@/contexts/userContext";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { useRouter, useSearchParams } from "next/navigation";
 import InputMask from "react-input-mask";
 import * as Yup from "yup";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
@@ -27,13 +26,8 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const router = useRouter();
+
   const { user } = useSession();
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-  if (!id) {
-    router.push("/");
-  }
 
   const initialValues: RegisterFormValues = {
     email: "",

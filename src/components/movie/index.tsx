@@ -13,6 +13,7 @@ const validationSchema = Yup.object().shape({
   title: Yup.string().required("Título é obrigatório"),
   releaseYear: Yup.number().required("Ano de lançamento é obrigatório"),
   overview: Yup.string().required("Sinopse é obrigatória"),
+  gender: Yup.string().required("Gênero obrigatória"),
   price: Yup.number()
     .required("Preço é obrigatório")
     .min(0, "Preço não pode ser negativo"),
@@ -64,6 +65,7 @@ export default function NewMovie() {
               overview: "",
               price: 0,
               poster: "",
+              gender: "",
               rented: false,
               userId: false,
               releaseYear: 0,
@@ -78,7 +80,7 @@ export default function NewMovie() {
               formData.append("overview", values.overview);
               formData.append("price", values.price.toString());
               formData.append("posterPath", values.poster);
-
+              formData.append("price", values.gender.toString());
               formData.append("rented", values.rented.toString());
 
               mutation.mutate({
@@ -89,6 +91,7 @@ export default function NewMovie() {
                 posterPath: values.poster,
                 rented: values.rented,
                 userId: 0,
+                gender: values.gender,
               });
             }}
           >
@@ -194,6 +197,25 @@ export default function NewMovie() {
                   />
                   <ErrorMessage
                     name="price"
+                    component="div"
+                    className="text-sm text-red-600"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="gender"
+                    className="block text-sm font-medium text-cyan-50"
+                  >
+                    Gênero
+                  </label>
+                  <Field
+                    id="gender"
+                    name="gender"
+                    type="text"
+                    className="w-full px-3 py-1 mt-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-200"
+                  />
+                  <ErrorMessage
+                    name="gender"
                     component="div"
                     className="text-sm text-red-600"
                   />

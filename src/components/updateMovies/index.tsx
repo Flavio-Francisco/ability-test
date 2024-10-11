@@ -16,7 +16,6 @@ import { useSession } from "@/contexts/userContext";
 import { updateMovie } from "@/fetch/updateMovie";
 import { deleteMovie } from "@/fetch/deleteMovie";
 import { Movies } from "@/types/movies";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { StyledTextField } from "@/utils/styledTextField";
@@ -25,6 +24,7 @@ const validationSchema = Yup.object().shape({
   title: Yup.string().required("Título é obrigatório"),
   releaseYear: Yup.number().required("Ano de lançamento é obrigatório"),
   overview: Yup.string().required("Sinopse é obrigatória"),
+  gender: Yup.string().required("Gênero obrigatória"),
   price: Yup.number()
     .required("Preço é obrigatório")
     .min(0, "Preço não pode ser negativo"),
@@ -33,14 +33,8 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function ListMovies() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-  if (!id) {
-    router.push("/");
-  }
-
   const { user } = useSession();
+
   const [selectedMovie, setSelectedMovie] = useState<Movies | null>(null);
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -93,10 +87,9 @@ export default function ListMovies() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOpenAutocomplete = (event: any, value: any) => {
     if (value) {
-      // Verifica se um filme foi selecionado
       setSelectedMovie(value);
       setOpen(true);
-      setImagePreview(value.posterPath); // Presumindo que você já tenha esse estado configurado
+      setImagePreview(value.posterPath);
     }
   };
   const handleOpenDelete = () => {
@@ -198,6 +191,7 @@ export default function ListMovies() {
                       poster: selectedMovie.posterPath,
                       rented: selectedMovie.rented,
                       userId: selectedMovie.userId,
+                      gender: selectedMovie.gender,
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values) => {
@@ -211,15 +205,17 @@ export default function ListMovies() {
                       );
                       formData.append("overview", values.overview);
                       formData.append("price", values.price.toString());
+                      if (values.gender) {
+                        formData.append("price", values.gender.toString());
+                      }
 
-                      // Se 'poster' estiver definido, use-o, caso contrário, use o existente
                       if (values.poster) {
                         formData.append("posterPath", values.poster);
                       } else {
                         formData.append(
                           "posterPath",
                           selectedMovie?.posterPath
-                        ); // usar o existente
+                        );
                       }
 
                       formData.append("rented", values.rented.toString());
@@ -233,6 +229,7 @@ export default function ListMovies() {
                         posterPath: values.poster,
                         rented: values.rented,
                         userId: values.userId,
+                        gender: values.gender,
                       });
                     }}
                   >
@@ -330,6 +327,25 @@ export default function ListMovies() {
                           />
                           <ErrorMessage
                             name="price"
+                            component="div"
+                            className="text-sm text-red-600"
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="gender"
+                            className="block text-sm font-medium text-cyan-50"
+                          >
+                            Gênero
+                          </label>
+                          <Field
+                            id="gender"
+                            name="gender"
+                            type="text"
+                            className="w-full px-3 py-1 mt-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-200"
+                          />
+                          <ErrorMessage
+                            name="gender"
                             component="div"
                             className="text-sm text-red-600"
                           />
